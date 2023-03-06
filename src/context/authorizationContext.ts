@@ -1,5 +1,7 @@
-import { userQueryResolver } from "../queries/user/index.js";
 import jwt from "jsonwebtoken";
+import { UserRepository } from "../repositories/index.js";
+
+const userRepository = new UserRepository();
 
 /**
  *
@@ -18,7 +20,6 @@ export const getUserFromToken = (req: any) => {
   }
 
   const token = results[1];
-  const decodedUser = jwt.decode(token);
-  return decodedUser;
-  //   const user = userQueryResolver.getUserById(decodedUser.id);
+  const decodedUser: any = jwt.decode(token);
+  return userRepository.findUniqueBy({ id: decodedUser.id });
 };

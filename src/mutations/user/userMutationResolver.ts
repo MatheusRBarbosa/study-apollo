@@ -6,7 +6,7 @@ const userRepository = new UserRepository();
 /**
  *
  */
-const addUser = (_: any, { data }: any) => {
+const addUser = (parent: any, { data }: any) => {
   const user = {
     name: data.name,
     email: data.email,

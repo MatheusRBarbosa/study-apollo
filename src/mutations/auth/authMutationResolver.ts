@@ -1,7 +1,7 @@
-import { UserRepository } from "../../repositories/index.js";
 import bcrypt from "bcrypt";
-import { GraphQLError } from "graphql";
 import jwt from "jsonwebtoken";
+import { InvalidCredentialsException } from "../../exceptions/index.js";
+import { UserRepository } from "../../repositories/index.js";
 
 const userRepository = new UserRepository();
 
@@ -12,11 +12,7 @@ const login = async (_, { data }: any) => {
   const user = await userRepository.findUniqueBy({ email: data.email }, true);
 
   if (!user || !bcrypt.compareSync(data.password, user.password)) {
-    throw new GraphQLError("Invalid credentials", {
-      extensions: {
-        statusCode: 401,
-      },
-    });
+    throw InvalidCredentialsException;
   }
 
   delete user["password"];
