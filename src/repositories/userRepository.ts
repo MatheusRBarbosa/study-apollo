@@ -1,8 +1,7 @@
-import { PrismaClient } from "@prisma/client";
+import { User } from "@prisma/client";
+import { BaseRepository } from "./baseRepository.js";
 
-export class UserRepository {
-  prisma = new PrismaClient();
-
+export class UserRepository extends BaseRepository<User> {
   /**
    *
    */
@@ -39,15 +38,5 @@ export class UserRepository {
         ...user,
       },
     });
-  };
-
-  /**
-   *
-   */
-  private exclude = <User, Key extends keyof User>(user: User, keys: Key[]) => {
-    for (let key of keys) {
-      delete user[key];
-    }
-    return user;
   };
 }

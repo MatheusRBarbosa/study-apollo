@@ -20,7 +20,17 @@ const getUserById = (parent: any, { id }: any, context: any) => {
   return userRepository.findUniqueBy({ id });
 };
 
+/**
+ *
+ */
+const getAuthedUser = (parent: any, args: any, context: any) => {
+  if (!context.authUser) throw UnauthenticatedException;
+
+  return context.authUser;
+};
+
 export const userQueryResolver = {
   getUsers,
   getUserById,
+  getAuthedUser,
 };
