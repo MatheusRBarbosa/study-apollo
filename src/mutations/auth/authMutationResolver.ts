@@ -1,16 +1,15 @@
-import { PrismaClient } from "@prisma/client";
+import { UserRepository } from "../../repositories/index.js";
 import bcrypt from "bcrypt";
 import { GraphQLError } from "graphql";
+import jwt from "jsonwebtoken";
 
-const prisma = new PrismaClient();
+const userRepository = new UserRepository();
 
 /**
  *
  */
 const login = async (_, { data }: any) => {
-  const user = await prisma.user.findUnique({
-    where: { email: data.email },
-  });
+  const user = await userRepository.findUniqueBy({ email: data.email }, true);
 
   if (!user || !bcrypt.compareSync(data.password, user.password)) {
     throw new GraphQLError("Invalid credentials", {
@@ -20,7 +19,9 @@ const login = async (_, { data }: any) => {
     });
   }
 
-  return "token from user";
+  delete user["password"];
+  const token = jwt.sign(user, process.env.JWT_SECRET);
+  return token;
 };
 
 export const authMutationResolver = {

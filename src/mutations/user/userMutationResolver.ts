@@ -1,19 +1,19 @@
-import { PrismaClient } from "@prisma/client";
 import bcrypt from "bcrypt";
+import { UserRepository } from "../../repositories/index.js";
 
-const prisma = new PrismaClient();
+const userRepository = new UserRepository();
 
 /**
  *
  */
 const addUser = (_: any, { data }: any) => {
-  return prisma.user.create({
-    data: {
-      name: data.name,
-      email: data.email,
-      password: bcrypt.hashSync(data.password, 10),
-    },
-  });
+  const user = {
+    name: data.name,
+    email: data.email,
+    password: bcrypt.hashSync(data.password, 10),
+  };
+
+  return userRepository.create(user);
 };
 
 export const userMutationResolver = {

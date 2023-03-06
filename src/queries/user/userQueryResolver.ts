@@ -1,21 +1,20 @@
-import { PrismaClient } from "@prisma/client";
+import { UserRepository } from "../../repositories/index.js";
 
-const prisma = new PrismaClient();
+const userRepository = new UserRepository();
 
 /**
  *
  */
 const getUsers = () => {
-  return prisma.user.findMany();
+  return userRepository.findMany();
 };
 
 /**
  *
  */
-const getUserById = (_: any, { id }: any) => {
-  return prisma.user.findUnique({
-    where: { id },
-  });
+const getUserById = (_: any, { id }: any, context: any) => {
+  console.log(context.user);
+  return userRepository.findUniqueBy({ id });
 };
 
 export const userQueryResolver = {
