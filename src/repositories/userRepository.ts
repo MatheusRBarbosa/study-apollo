@@ -8,6 +8,13 @@ export class UserRepository extends BaseRepository<User> {
   findUniqueBy = async (key: object, includePassword = false) => {
     const user = await this.prisma.user.findUnique({
       where: key,
+      include: {
+        favorites: {
+          select: {
+            name: true,
+          },
+        },
+      },
     });
 
     if (!includePassword) {
